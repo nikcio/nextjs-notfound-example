@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,8 +15,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const publicEnv = {
+    "NEXT_PUBLIC_ENV": "public",
+    "NEXT_PUBLIC_ENV_FROM_LAYOUT": "public-layout",
+  };
+
   return (
     <html lang="en">
+      <head>
+        <Script 
+            id="env-script"
+            strategy="beforeInteractive">
+          {`window['__ENV'] = ${JSON.stringify(publicEnv)}`}
+        </Script>
+      </head>
       <body className={inter.className}>{children}</body>
     </html>
   );
